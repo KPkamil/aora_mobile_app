@@ -6,7 +6,9 @@
     "baseUrl": ".",
     "paths": {
       "@*": ["app/*"],
-      "@assets": ["assets"]
+      "@assets": ["assets"],
+      "@constants": ["constants"],
+      "@components": ["components"]
     },
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
