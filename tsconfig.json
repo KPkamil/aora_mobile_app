@@ -6,7 +6,11 @@
     "baseUrl": ".",
     "paths": {
       "@*": ["app/*"],
+      "@lib": ["lib"],
+      "@types": ["types"],
       "@assets": ["assets"],
+      "@context": ["context"],
+      "@providers": ["providers"],
       "@constants": ["constants"],
       "@components": ["components"]
     },
