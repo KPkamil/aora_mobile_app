@@ -106,3 +106,19 @@ export const getCurrentUser = async () => {
     console.error(err);
   }
 };
+
+export const getAllPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId
+    );
+
+    return posts.documents;
+  } catch (err) {
+    if (typeof err === "string") {
+      console.error(err);
+      throw new Error(err);
+    }
+  }
+};
