@@ -122,3 +122,20 @@ export const getAllPosts = async () => {
     }
   }
 };
+
+export const getLatestPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId,
+      [Query.orderDesc("$createdAt"), Query.limit(7)]
+    );
+
+    return posts.documents;
+  } catch (err) {
+    if (typeof err === "string") {
+      console.error(err);
+      throw new Error(err);
+    }
+  }
+};

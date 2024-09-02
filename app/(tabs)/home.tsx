@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, Image, RefreshControl, Text, View } from "react-native";
 
 import { images } from "@constants";
-import { getAllPosts, useAppwrite } from "@lib";
+import { getAllPosts, getLatestPosts, useAppwrite } from "@lib";
 import { EmptyState, SearchInput, Trending, VideoCard } from "@components";
 
 const Home = () => {
@@ -11,6 +11,10 @@ const Home = () => {
 
   const { data: posts, refetch } = useAppwrite({
     fn: getAllPosts,
+  });
+
+  const { data: latestPosts } = useAppwrite({
+    fn: getLatestPosts,
   });
 
   const onRefresh = async () => {
@@ -56,7 +60,7 @@ const Home = () => {
               <Text className="text-gray-100 text-lg font-pregular mb-3">
                 Latest videos
               </Text>
-              <Trending posts={posts} />
+              <Trending posts={latestPosts} />
             </View>
           </View>
         )}
