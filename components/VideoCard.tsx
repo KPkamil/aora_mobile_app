@@ -1,4 +1,6 @@
 import { useState } from "react";
+import WebView from "react-native-webview";
+import { ResizeMode, Video } from "expo-av";
 import { Models } from "react-native-appwrite";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 
@@ -17,6 +19,8 @@ export const VideoCard = ({
   },
 }: VideoCardProps) => {
   const [play, setPlay] = useState(false);
+
+  const isMP4 = video?.endsWith(".mp4");
 
   return (
     <View className="flex-col items-center px-4 mb-14">
@@ -49,7 +53,27 @@ export const VideoCard = ({
         </View>
       </View>
       {play ? (
-        <Text className="text-white">Playing</Text>
+        isMP4 ? (
+          <Video
+            shouldPlay
+            useNativeControls
+            resizeMode={ResizeMode.CONTAIN}
+            className="w-full h-60 rounded-xl"
+            source={{
+              uri: video,
+            }}
+            onPlaybackStatusUpdate={(status) => {
+              if (status.isLoaded && status.didJustFinish) {
+                setPlay(false);
+              }
+            }}
+          />
+        ) : (
+          <WebView
+            source={{ uri: video }}
+            className="w-80 h-72 rounded-xl mt-5 bg-white/10"
+          />
+        )
       ) : (
         <TouchableOpacity
           activeOpacity={0.7}
