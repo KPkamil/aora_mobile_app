@@ -139,3 +139,20 @@ export const getLatestPosts = async () => {
     }
   }
 };
+
+export const searchPosts = async (query: string) => {
+  try {
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId,
+      [Query.search("title", query)]
+    );
+
+    return posts.documents;
+  } catch (err) {
+    if (typeof err === "string") {
+      console.error(err);
+      throw new Error(err);
+    }
+  }
+};

@@ -51,11 +51,7 @@ const Home = () => {
                 />
               </View>
             </View>
-            <SearchInput // Temporary props
-              value=""
-              handleChangeText={() => {}}
-              placeholder="Search for a video topic"
-            />
+            <SearchInput />
             <View className="w-full pt-5 pb-8">
               <Text className="text-gray-100 text-lg font-pregular mb-3">
                 Latest videos
