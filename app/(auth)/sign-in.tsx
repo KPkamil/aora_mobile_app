@@ -3,8 +3,9 @@ import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, ScrollView, Image, Text, Alert } from "react-native";
 
-import { signIn } from "@lib";
 import { images } from "@constants";
+import { useGlobalContext } from "@context";
+import { getCurrentUser, signIn } from "@lib";
 import { CustomButton, FormField } from "@components";
 
 const SignIn = () => {
@@ -13,6 +14,8 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+
+  const { login } = useGlobalContext();
 
   const submit = async () => {
     if (Object.values(form).some((value) => !value)) {
@@ -23,10 +26,15 @@ const SignIn = () => {
     setIsSubmitting(true);
 
     try {
-      const result = await signIn(form);
+      await signIn(form);
+      const result = await getCurrentUser();
 
-      // Set it to global state...
+      if (!result) {
+        Alert.alert("Error", "Login failed. Please try again.");
+        return;
+      }
 
+      login(result);
       router.replace("/home");
     } catch (err) {
       if (typeof err === "string") Alert.alert("Error", err);

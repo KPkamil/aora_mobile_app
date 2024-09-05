@@ -1,8 +1,9 @@
+import { router } from "expo-router";
 import { Models } from "react-native-appwrite";
 import { PropsWithChildren, useEffect, useState } from "react";
 
-import { getCurrentUser } from "@lib";
 import { GlobalContext } from "@context";
+import { getCurrentUser, signOut } from "@lib";
 
 export const GlobalProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,8 +32,22 @@ export const GlobalProvider = ({ children }: PropsWithChildren) => {
       });
   }, []);
 
+  const login = (user: Models.Document) => {
+    setUser(user);
+    setIsLoggedIn(true);
+  };
+
+  const logout = async () => {
+    await signOut();
+    setUser(null);
+    setIsLoggedIn(false);
+    router.replace("/sign-in");
+  };
+
   const value = {
     user,
+    login,
+    logout,
     isLoading,
     isLoggedIn,
   };

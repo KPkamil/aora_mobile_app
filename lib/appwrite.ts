@@ -156,3 +156,35 @@ export const searchPosts = async (query: string) => {
     }
   }
 };
+
+export const getUserPosts = async (userId?: string) => {
+  try {
+    if (!userId) throw new Error("Missing user ID");
+
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId,
+      [Query.equal("creator", userId)]
+    );
+
+    return posts.documents;
+  } catch (err) {
+    if (typeof err === "string") {
+      console.error(err);
+      throw new Error(err);
+    }
+  }
+};
+
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession("current");
+
+    return session;
+  } catch (err) {
+    if (typeof err === "string") {
+      console.error(err);
+      throw new Error(err);
+    }
+  }
+};

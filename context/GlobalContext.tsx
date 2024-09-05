@@ -2,14 +2,18 @@ import { Models } from "react-native-appwrite";
 import { useContext, createContext } from "react";
 
 type GlobalContextProps = {
+  logout: () => void;
   isLoading: boolean;
   isLoggedIn: boolean;
   user: Models.Document | null;
+  login: (user: Models.Document) => void;
 };
 
 const initialState: GlobalContextProps = {
   user: null,
+  login: () => {},
   isLoading: true,
+  logout: () => {},
   isLoggedIn: false,
 };
 
