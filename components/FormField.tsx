@@ -34,7 +34,7 @@ export const FormField = ({
       <Text className="text-base text-gray-100 font-pmedium">{title}</Text>
       <View className="w-full h-16 px-4 bg-black-100 border-2 border-black-200 rounded-2xl focus:border-secondary-100 items-center flex-row">
         <TextInput
-          className="flex-1 text-white font-psemibold text-base"
+          className="flex-1 text-white font-psemibold text-sm"
           value={value}
           placeholder={placeholder}
           keyboardType={keyboardType}

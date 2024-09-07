@@ -8,6 +8,7 @@
       "@*": ["app/*"],
       "@lib": ["lib"],
       "@types": ["types"],
+      "@hooks": ["hooks"],
       "@assets": ["assets"],
       "@context": ["context"],
       "@providers": ["providers"],
