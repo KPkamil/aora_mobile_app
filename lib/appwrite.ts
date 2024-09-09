@@ -6,11 +6,14 @@ import {
   Databases,
   ID,
   ImageGravity,
+  Models,
   Query,
   Storage,
 } from "react-native-appwrite";
 
 import { CreatePostForm, CreateUserPayload, SignInPayload } from "@types";
+
+import { handleError } from "./utils";
 
 export const config = {
   platform: process.env.PLATFORM,
@@ -71,10 +74,7 @@ export const createUser = async ({
 
     return newUser;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -84,10 +84,7 @@ export const signIn = async ({ email, password }: SignInPayload) => {
 
     return session;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -121,10 +118,7 @@ export const getAllPosts = async () => {
 
     return posts.documents;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -138,10 +132,7 @@ export const getLatestPosts = async () => {
 
     return posts.documents;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -155,10 +146,7 @@ export const searchPosts = async (query: string) => {
 
     return posts.documents;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -174,10 +162,7 @@ export const getUserPosts = async (userId?: string) => {
 
     return posts.documents;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -187,10 +172,7 @@ export const signOut = async () => {
 
     return session;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -220,10 +202,7 @@ export const getFilePreview = async (
 
     return fileUrl;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -251,10 +230,7 @@ export const uploadFile = async (
 
     return fileUrl;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
   }
 };
 
@@ -280,9 +256,70 @@ export const createVideo = async (form: CreatePostForm, userId?: string) => {
 
     return newPost;
   } catch (err) {
-    if (typeof err === "string") {
-      console.error(err);
-      throw new Error(err);
-    }
+    handleError(err);
+  }
+};
+
+export const getLikedPosts = async (userId?: string) => {
+  try {
+    if (!userId) throw new Error("Missing user ID");
+
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId,
+      [Query.contains("liked_by", userId)]
+    );
+
+    return posts.documents;
+  } catch (err) {
+    handleError(err);
+  }
+};
+
+export const likePostRequest = async (
+  post: Models.Document,
+  userId?: string
+) => {
+  try {
+    if (!userId) throw new Error("Missing user ID");
+
+    const liked_by = [...post.liked_by, userId];
+
+    const updatedPost = await databases.updateDocument(
+      config.databaseId,
+      config.videoCollectionId,
+      post.$id,
+      {
+        liked_by,
+      }
+    );
+
+    return updatedPost;
+  } catch (err) {
+    handleError(err);
+  }
+};
+
+export const dislikePostRequest = async (
+  post: Models.Document,
+  userId?: string
+) => {
+  try {
+    if (!userId) throw new Error("Missing user ID");
+
+    const liked_by = post.liked_by.filter((id: string) => id !== userId);
+
+    const updatedPost = await databases.updateDocument(
+      config.databaseId,
+      config.videoCollectionId,
+      post.$id,
+      {
+        liked_by,
+      }
+    );
+
+    return updatedPost;
+  } catch (err) {
+    handleError(err);
   }
 };

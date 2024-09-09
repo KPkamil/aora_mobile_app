@@ -1,29 +1,12 @@
-import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, Image, RefreshControl, Text, View } from "react-native";
 
+import { useHome } from "@hooks";
 import { images } from "@constants";
-import { useGlobalContext } from "@context";
-import { getAllPosts, getLatestPosts, useAppwrite } from "@lib";
 import { EmptyState, SearchInput, Trending, VideoCard } from "@components";
 
 const Home = () => {
-  const [refreshing, setRefreshing] = useState(false);
-
-  const { user } = useGlobalContext();
-  const { data: posts, refetch } = useAppwrite({
-    fn: getAllPosts,
-  });
-
-  const { data: latestPosts } = useAppwrite({
-    fn: getLatestPosts,
-  });
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
+  const { user, posts, onRefresh, refreshing, latestPosts } = useHome();
 
   return (
     <SafeAreaView className="bg-primary h-full">

@@ -8,9 +8,14 @@ import { CustomButton } from "./CustomButton";
 type EmptyStateProps = {
   title: string;
   subtitle: string;
+  showButton?: boolean;
 };
 
-export const EmptyState = ({ title, subtitle }: EmptyStateProps) => {
+export const EmptyState = ({
+  title,
+  subtitle,
+  showButton,
+}: EmptyStateProps) => {
   return (
     <View className="justify-center items-center px-4">
       <Image
@@ -22,11 +27,13 @@ export const EmptyState = ({ title, subtitle }: EmptyStateProps) => {
         {title}
       </Text>
       <Text className="font-pmedium text-sm text-gray-100">{subtitle}</Text>
-      <CustomButton
-        title="Create video"
-        containerStyles="w-full my-5"
-        handlePress={() => router.push("/create")}
-      />
+      {showButton && (
+        <CustomButton
+          title="Create video"
+          containerStyles="w-full my-5"
+          handlePress={() => router.push("/create")}
+        />
+      )}
     </View>
   );
 };

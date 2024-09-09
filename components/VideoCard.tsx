@@ -1,26 +1,33 @@
-import { useState } from "react";
 import WebView from "react-native-webview";
 import { ResizeMode, Video } from "expo-av";
 import { Models } from "react-native-appwrite";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 
 import { icons } from "@constants";
+import { useVideoCard } from "@hooks";
 
 type VideoCardProps = {
+  refetch?: () => void;
   video: Models.Document;
 };
 
-export const VideoCard = ({
-  video: {
+export const VideoCard = ({ video, refetch }: VideoCardProps) => {
+  const {
+    play,
     title,
-    video,
+    isMP4,
+    avatar,
+    isLiked,
+    username,
+    videoUrl,
+    likePost,
     thumbnail,
-    creator: { username, avatar },
-  },
-}: VideoCardProps) => {
-  const [play, setPlay] = useState(false);
-
-  const isMP4 = video?.endsWith(".mp4");
+    changePlay,
+  } = useVideoCard({
+    video,
+    refetch,
+  });
 
   return (
     <View className="flex-col items-center px-4 mb-14">
@@ -49,7 +56,12 @@ export const VideoCard = ({
           </View>
         </View>
         <View className="pt-2">
-          <Image source={icons.menu} className="w-5 h-5" resizeMode="contain" />
+          <AntDesign
+            size={24}
+            onPress={likePost}
+            color={isLiked ? "red" : "white"}
+            name={isLiked ? "heart" : "hearto"}
+          />
         </View>
       </View>
       {play ? (
@@ -60,24 +72,24 @@ export const VideoCard = ({
             resizeMode={ResizeMode.CONTAIN}
             className="w-full h-60 rounded-xl"
             source={{
-              uri: video,
+              uri: videoUrl,
             }}
             onPlaybackStatusUpdate={(status) => {
               if (status.isLoaded && status.didJustFinish) {
-                setPlay(false);
+                changePlay(false);
               }
             }}
           />
         ) : (
           <WebView
-            source={{ uri: video }}
+            source={{ uri: videoUrl }}
             className="w-80 h-72 rounded-xl mt-5 bg-white/10"
           />
         )
       ) : (
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => setPlay(true)}
+          onPress={() => changePlay(true)}
           className="w-full h-60 rounded-xl mt-3 relative justify-center items-center"
         >
           <Image

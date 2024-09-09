@@ -17,8 +17,8 @@ const SignIn = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <ScrollView>
-        <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="padding">
+        <ScrollView>
           <View className="w-full justify-center min-h-[85vh] px-4 my-6">
             <Image
               source={images.logo}
@@ -59,8 +59,8 @@ const SignIn = () => {
               </Link>
             </View>
           </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

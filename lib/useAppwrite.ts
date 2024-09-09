@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Models } from "react-native-appwrite";
 
 type AppwriteHookProps = {
@@ -10,7 +10,7 @@ export const useAppwrite = ({ fn }: AppwriteHookProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<Models.Document[] | undefined>([]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
 
     try {
@@ -24,13 +24,15 @@ export const useAppwrite = ({ fn }: AppwriteHookProps) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const refetch = () => fetchData();
+  const refetch = useCallback(() => {
+    fetchData();
+  }, [fetchData]);
 
   return { data, refetch, isLoading };
 };
